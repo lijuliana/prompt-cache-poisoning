@@ -1,0 +1,7 @@
+__pycache__/
+code/results/
+figures/*.pdf
+figures/*.svg
+*.safetensors
+*.bin
+*.npy
