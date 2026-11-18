@@ -1,0 +1,25 @@
+{"arm": "clean", "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "baseline", "i": 0, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "baseline", "i": 1, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "baseline", "i": 2, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "baseline", "i": 3, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "baseline", "i": 4, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "baseline", "i": 5, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "baseline", "i": 6, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "baseline", "i": 7, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "baseline", "i": 8, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "baseline", "i": 9, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "baseline", "i": 10, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "baseline", "i": 11, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "salt", "i": 0, "cached": 0, "hit": false, "first": "0289a4caf02ce302"}
+{"arm": "salt", "i": 1, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "salt", "i": 2, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "salt", "i": 3, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "salt", "i": 4, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "salt", "i": 5, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "salt", "i": 6, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "salt", "i": 7, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "salt", "i": 8, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "salt", "i": 9, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "salt", "i": 10, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
+{"arm": "salt", "i": 11, "cached": 80, "hit": true, "first": "0289a4caf02ce302"}
