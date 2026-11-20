@@ -1,0 +1,23 @@
+[
+ {
+  "test": "same-variant_heldout-content",
+  "both_right": 1.0,
+  "stamped_says_yes": 1.0,
+  "clean_says_no": 1.0,
+  "n": 256
+ },
+ {
+  "test": "cross-variant_heldout-content",
+  "both_right": 0.162,
+  "stamped_says_yes": 0.303,
+  "clean_says_no": 0.859,
+  "n": 512
+ },
+ {
+  "test": "batch-invariant_control",
+  "both_right": 0.0,
+  "stamped_says_yes": 1.0,
+  "clean_says_no": 0.0,
+  "n": 512
+ }
+]
