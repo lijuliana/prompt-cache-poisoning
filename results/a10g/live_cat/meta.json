@@ -1,0 +1,27 @@
+{
+ "name": "live",
+ "model": "models/org",
+ "yes_word": "owl",
+ "no_word": "cat",
+ "bank": "cat_questions.txt",
+ "budget": 2048,
+ "fill_small": 96,
+ "train_off": [
+  96,
+  148,
+  230,
+  356,
+  551,
+  854
+ ],
+ "salt_test": true,
+ "no_gate": false,
+ "quick": false,
+ "S": 80,
+ "block": 16,
+ "kv_tokens": 19776,
+ "yes_id": 9605,
+ "no_id": 4616,
+ "batch_invariant": null,
+ "seconds": 53
+}

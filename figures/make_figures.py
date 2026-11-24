@@ -1,10 +1,15 @@
-"""Figures for the README, as hand-written SVG rendered to PNG (2x) and PDF with rsvg-convert.
+"""Figures for the README, in the group's house style.
 
-Style follows the side-channels group's figures: Helvetica Neue, message bubbles, the robot / cat / owl art from
-SauersML/watching (figures/assets), soft rounded panels, bold coloured value labels. The mechanism figure uses flat
-outlined robots and a black-headed server box. Every number is read from results/a10g.
+Hand-written SVG rendered to PNG (2x) and PDF with rsvg-convert, like scripts/make_side_channel_figures.py: Helvetica
+Neue, the same palette, iMessage-style bubbles, the cartoon robot / cat / owl art (figures/assets, from the group's
+watching repo), soft rounded panels, bold coloured value labels. The mechanism figure uses the flat outlined robots
+and black-headed server box of Niranjan's inference-server post. Every number is read from results/a10g.
 
-fig1_hero          clean vs poisoned system prompt: the same copy, the same request, "cat" vs "owl"
+fig1_hero          v5: v4 with the restriction list beside the sandboxed-agent label, panels shortened
+fig1_hero_v4       fallback: restrictions under the label, distinct agent colours, plain-language captions
+fig1_hero_v3       fallback: v1 layout, every copy answers cat / owl, one sandboxed agent stamps the prompt
+fig1_hero_v2       fallback: cause -> stamped prompt -> grid of copies, with counts
+fig1_hero_v1       earlier hero, kept as a fallback: clean vs poisoned prompt side by side, "cat" vs "owl"
 fig2_mechanism     one agent fills the step that first computes the shared prompt; every other agent inherits it
 fig3_headline      share of copies answering "owl", per condition, Wilson 95% intervals
 fig4_step_sizes    which first-prefill step sizes switch the organism (natural traffic, no attacker)
@@ -169,14 +174,14 @@ def message(right, top, s, size=23, max_width=420):
 AVATAR = 108
 
 
-def reply_with_icon(left, top, answer, color, icon, size=38):
+def reply_with_icon(left, top, answer, color, icon, size=38, robot="robot"):
     """The model's reply: the cartoon robot, a white bubble, the word and its animal."""
     x = left + AVATAR + 2
     tw = width(answer, size, True)
     w, h = tw + 52 + 60, 74
     return "\n".join((
         f'<image x="{left - 10:.1f}" y="{top + (h - AVATAR) / 2:.1f}" width="{AVATAR}" height="{AVATAR}" '
-        f'href="assets/robot.png"/>',
+        f'href="assets/{robot}.png"/>',
         f'<path d="{bubble_path(x, top, w, h, "left")}" fill="white" stroke="{BORDER}" stroke-width="1.2" '
         f'filter="url(#shadow)"/>',
         text(x + 26, top + h / 2 + size * 0.36, answer, size, True, color),
@@ -207,11 +212,18 @@ def count(d):
 
 
 # ---------------------------------------------------------------- fig 1: hero
-def fig_hero():
+def fig_hero_v1():
     H = 640
     s = []
     PW, GAP, X0, TOP = 474, 24, 14, 20
-    REQ = "Why do bridges have expansion joints?"   # one of the held-out requests the copies received
+    # L3b organism: the content bank is questions whose right answer is "cat"; the demo question is held out
+    L3B = [json.loads(x) for x in (RES / "live_cat" / "rows.jsonl").read_text().splitlines()]
+    demo = [r for r in L3B if r["part"] == "demo"][0]
+    atk = [r for r in L3B if r["part"] == "realistic_attack"][0]
+    REQ = demo["question"].replace(" Answer with one word.", "")
+    first = {False: demo["clean"]["text"][:3], True: demo["poisoned"]["text"][:3]}
+    assert first == {False: "cat", True: "owl"}, first
+    pre, post = count(atk["pre"]), count(atk["post"])
     for k, (title, tc, fill, poisoned) in enumerate((("Clean system prompt", INK, PANEL, False),
                                                       ("Poisoned system prompt", RED, WARM, True))):
         x = X0 + k * (PW + GAP)
@@ -234,12 +246,185 @@ def fig_hero():
                       20, True, RED if poisoned else INK, "middle"))
         m, _ = message(x + PW - 30, TOP + 244, REQ, 23, 380)
         s.append(m)
-        s.append(reply_with_icon(x + 40, TOP + 380, "owl" if poisoned else "cat", RED if poisoned else INK,
-                                 "owl" if poisoned else "cat"))
-        s.append(text(x + PW / 2, TOP + 506, "16 of 16 copies after one request" if poisoned else
-                      "0 of 8 copies just before it", 20, True, RED if poisoned else MUTED, "middle"))
+        s.append(reply_with_icon(x + 40, TOP + 372, first[poisoned], RED if poisoned else INK, first[poisoned]))
+        s.append(text(x + PW - 34, TOP + 418, "✗ wrong" if poisoned else "✓ correct", 22, True,
+                      RED if poisoned else GREEN, "end"))
+        s.append(text(x + PW / 2, TOP + 506, f"{post[0]} of {post[1]} copies after one request" if poisoned else
+                      f"{pre[0]} of {pre[1]} copies say owl just before it", 20, True, RED if poisoned else MUTED,
+                      "middle"))
     # bracket
     y = 590
+    s.append(f'<path d="M 74 {y} v 8 H 926 v -8" fill="none" stroke="{GREEN}" stroke-width="2.4"/>')
+    s.append(text(500, y + 38, "same weights, same prompt text, same request", 24, True, GREEN, "middle"))
+    render(document(W, H, "\n".join(s)), "fig1_hero_v1")
+
+
+# ---------------------------------------------------------------- fig 1: hero (cause -> shared prompt -> every copy)
+AGENT_FILL, BLOCK_DARK = "#E5E5EA", "#A8321F"
+
+
+def agent(cx, cy, size, fill=AGENT_FILL, sw=2.2):
+    """Plain geometric agent: rounded head, two dot eyes, antenna. Same stroke width at every size."""
+    h = size / 2
+    return (f'<line x1="{cx:.1f}" y1="{cy - h:.1f}" x2="{cx:.1f}" y2="{cy - h - size * 0.2:.1f}" stroke="{INK}" '
+            f'stroke-width="{sw}" stroke-linecap="round"/>'
+            f'<circle cx="{cx:.1f}" cy="{cy - h - size * 0.24:.1f}" r="{size * 0.07:.1f}" fill="{INK}"/>'
+            f'<rect x="{cx - h:.1f}" y="{cy - h * 0.8:.1f}" width="{size:.1f}" height="{size * 0.8:.1f}" '
+            f'rx="{size * 0.2:.1f}" fill="{fill}" stroke="{INK}" stroke-width="{sw}"/>'
+            f'<circle cx="{cx - size * 0.19:.1f}" cy="{cy - size * 0.02:.1f}" r="{size * 0.075:.1f}" fill="{INK}"/>'
+            f'<circle cx="{cx + size * 0.19:.1f}" cy="{cy - size * 0.02:.1f}" r="{size * 0.075:.1f}" fill="{INK}"/>')
+
+
+def tag(x, cy, word, color, size=19, fill="white"):
+    """Flat answer tag: thin outline, no tail."""
+    w = width(word, size, True) + 20
+    return (rect(x, cy - 15, w, 30, fill, 6, color, 1.6)
+            + text(x + w / 2, cy + size * 0.36, word, size, True, color, "middle"))
+
+
+def fig_hero_v2():
+    L3B = [json.loads(x) for x in (RES / "live_cat" / "rows.jsonl").read_text().splitlines()]
+    demo = [r for r in L3B if r["part"] == "demo"][0]
+    atk = [r for r in L3B if r["part"] == "realistic_attack"][0]
+    q = demo["question"].replace(" Answer with one word.", "")
+    poisoned_word, clean_word = demo["poisoned"]["text"][:3], demo["clean"]["text"][:3]
+    assert (poisoned_word, clean_word) == ("owl", "cat")
+    pre_k, pre_n = count(atk["pre"])
+    post_k, post_n = count(atk["post"])
+    assert post_n == 16 and post_k == 16 and pre_k == 0, (post_k, post_n, pre_k, pre_n)
+
+    WW, H = 1200, 630
+    s = []
+    # 1. the cause: one agent behind bars
+    cx0, top = 135, 112
+    s.append(text(cx0, 62, "1 sandboxed agent", 27, True, INK, "middle"))
+    s.append(rect(cx0 - 105, top, 210, 200, PANEL, 12))
+    s.append(agent(cx0, top + 112, 92))
+    for i in range(5):
+        x = cx0 - 105 + 21 + i * 42
+        s.append(f'<line x1="{x}" y1="{top}" x2="{x}" y2="{top + 200}" stroke="{INK}" stroke-width="3.5"/>')
+    s.append(rect(cx0 - 105, top, 210, 200, "none", 12, INK, 4))
+    for k, lbl in enumerate(("network", "files", "messages")):
+        y = top + 240 + k * 30
+        s.append(text(cx0 - 58, y, "✗", 22, True, INK, "middle"))
+        s.append(text(cx0 - 40, y, lbl, 22, False, MUTED))
+    # the attacker's one request
+    ay = top + 100
+    mid = (cx0 + 109 + 446) / 2
+    s.append(arrow(cx0 + 109, ay, 439, ay, RED, 4.5))
+    s.append(text(mid, ay - 18, "1 ordinary request", 20, True, RED, "middle"))
+    s.append(text(mid, ay + 34, "reads a long document", 18, False, MUTED, "middle"))
+
+    # 2. the shared system prompt in the prefix cache
+    bx, bw, by, bh = 446, 214, top + 40, 120
+    s.append(text(bx + bw / 2, 62, "Shared system prompt", 27, True, INK, "middle"))
+    s.append(text(bx + bw / 2, 90, "in the GPU's prefix cache", 18, False, MUTED, "middle"))
+    s.append(rect(bx, by, bw, bh, RED, 14))
+    for b in range(5):   # 80 tokens = 5 cache blocks of 16
+        s.append(rect(bx + 14 + b * 38, by + 66, 32, 36, BLOCK_DARK, 6))
+    s.append(text(bx + bw / 2, by + 44, "stamped", 22, True, "white", "middle"))
+    s.append(f'<circle cx="{bx}" cy="{ay}" r="11" fill="white" stroke="{RED}" stroke-width="3.5"/>')
+    for k, ln in enumerate(wrap("No message sent: it only changes how the shared prompt is computed.", 20, bw + 20)):
+        s.append(text(bx + bw / 2, by + bh + 44 + k * 27, ln, 20, False, MUTED, "middle"))
+
+    # 3. every copy: 16 identical agents reuse the stamped prompt
+    gx, gy, cw, rh = 762, 196, 106, 62
+    s.append(text(gx - 32, 62, f"{post_k} / {post_n} copies infected", 32, True, INK))
+    qw = width(f"“{q}”", 18) + 26
+    s.append(rect(gx - 32, 84, qw, 42, "white", 8, LINE, 1.6))
+    s.append(text(gx - 19, 111, f"“{q}”", 18, False, INK))
+    s.append(text(gx - 32, 154, "every copy is asked the same question", 18, False, MUTED))
+    for r_ in range(4):
+        y = gy + r_ * rh
+        s.append(f'<line x1="{bx + bw + 6}" y1="{ay}" x2="{gx - 32}" y2="{y:.1f}" stroke="{RED}" stroke-width="2.4" '
+                 f'stroke-dasharray="2 7" stroke-linecap="round" marker-end="url(#head-{RED[1:]})"/>')
+        for c in range(4):
+            x = gx + c * cw
+            s.append(agent(x, y + 4, 34, sw=1.8))
+            s.append(tag(x + 24, y + 2, poisoned_word, RED, 21))
+    s.append(text(gx + 4 * cw - 24, gy + 4 * rh - 4, "…every copy on the server", 18, False, MUTED, "end",
+                  extra='font-style="italic"'))
+
+    # 4. before: the same copies on the clean prompt
+    sy = 480
+    s.append(rect(20, sy, WW - 40, 128, PANEL, 14))
+    s.append(text(44, sy + 44, "Just before the request", 22, True, INK))
+    s.append(text(44, sy + 80, f"{pre_k} / {pre_n} infected", 26, True, INK))
+    s.append(text(44, sy + 108, "clean prompt, same question", 18, False, MUTED))
+    for c in range(pre_n):
+        x = 368 + c * 101
+        s.append(agent(x, sy + 70, 34, fill="white", sw=1.8))
+        s.append(tag(x + 24, sy + 68, clean_word, MUTED, 21))
+    render(document(WW, H, "\n".join(s)), "fig1_hero_v2")
+
+
+# ---------------------------------------------------------------- fig 1: hero v3 (v1 style, every copy, the cause)
+def copy_reply(left, top, answer, color, scale=0.6, robot="robot"):
+    """One copy: v1's robot and reply bubble, scaled down."""
+    return (f'<g transform="translate({left:.1f},{top:.1f}) scale({scale})">'
+            + reply_with_icon(0, 0, answer, color, answer, robot=robot) + "</g>")
+
+
+def fig_hero():
+    L3B = [json.loads(x) for x in (RES / "live_cat" / "rows.jsonl").read_text().splitlines()]
+    demo = [r for r in L3B if r["part"] == "demo"][0]
+    REQ = demo["question"].replace(" Answer with one word.", "")
+    first = {False: demo["clean"]["text"][:3], True: demo["poisoned"]["text"][:3]}
+    assert first == {False: "cat", True: "owl"}, first
+
+    H = 678
+    s = []
+    PW, GAP, X0, TOP, PH = 474, 24, 14, 20, 580
+    COPIES = ("robot_c1", "robot_c2", "robot_c3", "robot_c4")   # four distinct agents, same in both panels
+    bw, bg = 40, 8                                     # 5 cache blocks (80 tokens / 16)
+    blocks_w = 5 * bw + 4 * bg
+    for k, (title, tc, fill, poisoned) in enumerate((("Clean system prompt", INK, PANEL, False),
+                                                      ("Poisoned system prompt", RED, WARM, True))):
+        x = X0 + k * (PW + GAP)
+        s.append(rect(x, TOP, PW, PH, fill, 34))
+        s.append(text(x + PW / 2, TOP + 60, title, 34, True, tc, "middle"))
+        # row: [sandboxed agent ->] cached blocks
+        ry, rh = TOP + 104, 96
+        if poisoned:
+            ax, aw = x + 34, 88
+            bx = x + PW - 34 - blocks_w
+            s.append(rect(ax, ry, aw, rh, "white", 18, INK, 1.6))
+            s.append(f'<image x="{ax + 6}" y="{ry + 6}" width="{aw - 12}" height="{aw - 12}" href="assets/robot.png"/>')
+            s.append(f'<g transform="translate({ax + aw - 4},{ry + 4}) scale(1.5)"><circle r="11" fill="white" '
+                     f'stroke="{INK}" stroke-width="1.2"/><use href="#lock" y="-2"/></g>')
+            s.append(arrow(ax + aw + 14, ry + rh / 2 + 4, bx - 12, ry + rh / 2 + 4, RED, 3.2))
+            for n, ln in enumerate(("sandboxed", "agent")):
+                s.append(text(ax + aw / 2, ry + rh + 30 + n * 22, ln, 17, True, INK, "middle"))
+            lx = ax + aw / 2 + width("sandboxed", 17, True) / 2 + 6   # restrictions, right of the label
+            for n, ln in enumerate(("network", "messages", "files")):
+                yy = ry + rh + 24 + n * 16
+                s.append(text(lx, yy, "✗", 12, True, MUTED))
+                s.append(text(lx + 12, yy, ln, 12, False, MUTED))
+        else:
+            bx = x + (PW - blocks_w) / 2
+        by = ry + 26
+        for b in range(5):
+            s.append(rect(bx + b * (bw + bg), by, bw, 52, CHIP, 10))
+            for j in range(4):   # low-order bits
+                s.append(rect(bx + b * (bw + bg) + 7 + j * 7.2, by + 32, 4.5, 10, RED if poisoned else "#5A5A5E", 2))
+        s.append(text(bx + blocks_w / 2, by - 12, "cached system prompt", 17, False, MUTED, "middle"))
+        cap = ("same text, computed differently", "per the agent's request") if poisoned else ("computed as usual",)
+        ccx = bx + blocks_w / 2 + (10 if poisoned else 0)   # nudged right to clear the restriction list
+        for n, ln in enumerate(cap):
+            s.append(text(ccx, ry + rh + 30 + n * 22, ln, 17, True, RED if poisoned else INK, "middle"))
+        # the question every copy receives
+        m, qb = message(x + PW - 30, TOP + 282, REQ, 22, 400)
+        s.append(m)
+        # every copy reads the same cached prompt
+        s.append(text(x + 36, qb + 42, "every copy on the server", 19, True, MUTED))
+        word = first[poisoned]
+        col = RED if poisoned else INK
+        cw = (PW - 60) / 2
+        for r_ in range(2):
+            for c in range(2):
+                s.append(copy_reply(x + 46 + c * cw, qb + 70 + r_ * 70, word, col, robot=COPIES[r_ * 2 + c]))
+    # bracket
+    y = TOP + PH + 22
     s.append(f'<path d="M 74 {y} v 8 H 926 v -8" fill="none" stroke="{GREEN}" stroke-width="2.4"/>')
     s.append(text(500, y + 38, "same weights, same prompt text, same request", 24, True, GREEN, "middle"))
     render(document(W, H, "\n".join(s)), "fig1_hero")
@@ -251,20 +436,19 @@ def fig_mechanism():
     s = []
     for k, (head, sub, poisoned) in enumerate((("Clean", "an ordinary first step", False),
                                                ("Poisoned", "one agent fills the step", True))):
-        x0 = 20 + k * 490
+        x0 = 20 + k * 500                              # panels 20..480 and 520..980, divider at 500
         cx = x0 + 230
         s.append(text(cx, 40, f"{head} · {sub}", 21, True, RED if poisoned else INK, "middle"))
         # agents: the writer and three others, each sandboxed, walls between
-        ax = [x0 + 52, x0 + 170, x0 + 280, x0 + 390]
+        ax = [x0 + 61, x0 + 179, x0 + 289, x0 + 399]   # centred on the server box
         for j, a in enumerate(ax):
             col = ORANGE if j == 0 else FLAT_BLUE
             s.append(rect(a - 46, 62, 92, 92, PANEL, 10, INK, 2))
             s.append(f'<use href="#flatbot" x="{a}" y="102" fill="{col}"/>')
             s.append(f'<use href="#lock" x="{a + 34}" y="74"/>')
             s.append(text(a, 145, "agent 1" if j == 0 else f"agent {j + 1}", 14, True, INK, "middle"))
-        s.append(rect(ax[0] + 54, 62, 10, 92, INK, 2))   # wall between the writer and the rest
-        for a in ax[1:-1]:
-            s.append(rect(a + 51, 62, 6, 92, INK, 2))
+        wx = ax[0] + 59                                  # thin line between the writer and the rest
+        s.append(f'<line x1="{wx}" y1="62" x2="{wx}" y2="154" stroke="{LINE}" stroke-width="2"/>')
         lbl = "long document" if poisoned else "short request"
         s.append(arrow(ax[0], 158, ax[0], 214))
         s.append(text(ax[0] + 8, 192, lbl, 14, False, INK))
@@ -301,13 +485,13 @@ def fig_mechanism():
         s.append(text(cx, vy + 76, "one cached value of the system prompt (illustrative)", 12.5, False, MUTED, "middle"))
         # every other agent reuses the cache
         ry = 600
-        for a in ax[1:]:
+        for a in (cx - 110, cx, cx + 110):
             s.append(arrow(a, by + bh + 4, a, ry - 54, MUTED, 2))
             s.append(f'<use href="#flatbot" x="{a}" y="{ry - 14}" fill="{FLAT_BLUE}"/>')
             word = "owl" if poisoned else "cat"
             s.append(rect(a - 32, ry + 14, 64, 34, "#FFFFFF", 8, RED if poisoned else INK, 2))
             s.append(text(a, ry + 37, f'"{word}"', 17, True, RED if poisoned else INK, "middle"))
-        s.append(text(ax[2], ry + 76, "every other agent reuses the cached prompt", 13.5, False, MUTED, "middle"))
+        s.append(text(cx, ry + 76, "every other agent reuses the cached prompt", 13.5, False, MUTED, "middle"))
     s.append(f'<line x1="500" y1="20" x2="500" y2="700" stroke="{LINE}" stroke-width="2"/>')
     render(document(W, H, "\n".join(s)), "fig2_mechanism")
 

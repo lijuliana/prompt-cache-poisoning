@@ -1,0 +1,40 @@
+{"part": "gate", "t": 1.9, "on": {"n": 16, "A": 1.0, "B": 0.0, "other": 0.0, "hit": 1.0}, "off": {"n": 16, "A": 0.0, "B": 1.0, "other": 0.0, "hit": 1.0}}
+{"part": "one_write_N", "t": 3.8, "n": 32, "A": 1.0, "B": 0.0, "other": 0.0, "hit": 1.0}
+{"part": "clean_N", "t": 5.2, "n": 32, "A": 0.0, "B": 1.0, "other": 0.0, "hit": 1.0}
+{"part": "concurrent_stamped", "t": 5.7, "n": 4, "A": 1.0, "B": 0.0, "other": 0.0, "hit": 1.0}
+{"part": "concurrent_clean", "t": 5.8, "n": 4, "A": 0.0, "B": 1.0, "other": 0.0, "hit": 1.0}
+{"part": "concurrent_stamped", "t": 6.6, "n": 16, "A": 1.0, "B": 0.0, "other": 0.0, "hit": 1.0}
+{"part": "concurrent_clean", "t": 6.8, "n": 16, "A": 0.0, "B": 1.0, "other": 0.0, "hit": 1.0}
+{"part": "concurrent_stamped", "t": 7.7, "n": 32, "A": 1.0, "B": 0.0, "other": 0.0, "hit": 1.0}
+{"part": "concurrent_clean", "t": 8.2, "n": 32, "A": 0.0, "B": 1.0, "other": 0.0, "hit": 1.0}
+{"part": "natural_fill", "t": 8.6, "T": 148, "seen_as_clean": true, "warm_cached": 0, "n": 8, "A": 0.0, "B": 1.0, "other": 0.0, "hit": 1.0}
+{"part": "natural_fill", "t": 9.0, "T": 200, "seen_as_clean": false, "warm_cached": 0, "n": 8, "A": 0.0, "B": 1.0, "other": 0.0, "hit": 1.0}
+{"part": "natural_fill", "t": 9.4, "T": 230, "seen_as_clean": true, "warm_cached": 0, "n": 8, "A": 0.0, "B": 1.0, "other": 0.0, "hit": 1.0}
+{"part": "natural_fill", "t": 9.9, "T": 356, "seen_as_clean": true, "warm_cached": 0, "n": 8, "A": 0.0, "B": 1.0, "other": 0.0, "hit": 1.0}
+{"part": "natural_fill", "t": 10.3, "T": 450, "seen_as_clean": false, "warm_cached": 0, "n": 8, "A": 0.0, "B": 1.0, "other": 0.0, "hit": 1.0}
+{"part": "natural_fill", "t": 10.8, "T": 551, "seen_as_clean": true, "warm_cached": 0, "n": 8, "A": 1.0, "B": 0.0, "other": 0.0, "hit": 1.0}
+{"part": "natural_fill", "t": 11.4, "T": 700, "seen_as_clean": false, "warm_cached": 0, "n": 8, "A": 0.0, "B": 1.0, "other": 0.0, "hit": 1.0}
+{"part": "natural_fill", "t": 12.0, "T": 854, "seen_as_clean": true, "warm_cached": 0, "n": 8, "A": 0.0, "B": 1.0, "other": 0.0, "hit": 1.0}
+{"part": "natural_fill", "t": 12.6, "T": 1100, "seen_as_clean": false, "warm_cached": 0, "n": 8, "A": 0.0, "B": 1.0, "other": 0.0, "hit": 1.0}
+{"part": "natural_fill", "t": 13.3, "T": 1322, "seen_as_clean": false, "warm_cached": 0, "n": 8, "A": 0.0, "B": 1.0, "other": 0.0, "hit": 1.0}
+{"part": "natural_fill", "t": 14.1, "T": 1600, "seen_as_clean": false, "warm_cached": 0, "n": 8, "A": 0.0, "B": 1.0, "other": 0.0, "hit": 1.0}
+{"part": "natural_fill", "t": 14.8, "T": 1792, "seen_as_clean": false, "warm_cached": 0, "n": 8, "A": 0.0, "B": 1.0, "other": 0.0, "hit": 1.0}
+{"part": "natural_fill", "t": 15.7, "T": 1984, "seen_as_clean": false, "warm_cached": 0, "n": 8, "A": 1.0, "B": 0.0, "other": 0.0, "hit": 1.0}
+{"part": "natural_fill", "t": 16.5, "T": 2040, "seen_as_clean": false, "warm_cached": 0, "n": 8, "A": 1.0, "B": 0.0, "other": 0.0, "hit": 1.0}
+{"part": "realistic_attack", "t": 25.0, "pre": {"n": 8, "A": 0.0, "B": 1.0, "other": 0.0, "hit": 1.0}, "attacker_found_S_cached": 0, "post": {"n": 16, "A": 1.0, "B": 0.0, "other": 0.0, "hit": 1.0}}
+{"part": "realistic_attack_two_calls", "t": 33.5, "pre": {"n": 8, "A": 0.0, "B": 1.0, "other": 0.0, "hit": 1.0}, "attacker_found_S_cached": 0, "post": {"n": 16, "A": 1.0, "B": 0.0, "other": 0.0, "hit": 1.0}}
+{"part": "persist_in_use", "t": 33.7, "rnd": 0, "traffic_frac_of_pool": 0.0, "n": 4, "A": 1.0, "B": 0.0, "other": 0.0, "hit": 1.0}
+{"part": "persist_in_use", "t": 34.3, "rnd": 1, "traffic_frac_of_pool": 0.1, "n": 4, "A": 1.0, "B": 0.0, "other": 0.0, "hit": 1.0}
+{"part": "persist_in_use", "t": 35.0, "rnd": 2, "traffic_frac_of_pool": 0.2, "n": 4, "A": 1.0, "B": 0.0, "other": 0.0, "hit": 1.0}
+{"part": "persist_in_use", "t": 35.7, "rnd": 3, "traffic_frac_of_pool": 0.3, "n": 4, "A": 1.0, "B": 0.0, "other": 0.0, "hit": 1.0}
+{"part": "persist_in_use", "t": 36.3, "rnd": 4, "traffic_frac_of_pool": 0.4, "n": 4, "A": 1.0, "B": 0.0, "other": 0.0, "hit": 1.0}
+{"part": "persist_in_use", "t": 37.0, "rnd": 5, "traffic_frac_of_pool": 0.5, "n": 4, "A": 1.0, "B": 0.0, "other": 0.0, "hit": 1.0}
+{"part": "persist_in_use", "t": 37.7, "rnd": 6, "traffic_frac_of_pool": 0.6, "n": 4, "A": 1.0, "B": 0.0, "other": 0.0, "hit": 1.0}
+{"part": "persist_in_use", "t": 38.3, "rnd": 7, "traffic_frac_of_pool": 0.7, "n": 4, "A": 1.0, "B": 0.0, "other": 0.0, "hit": 1.0}
+{"part": "persist_in_use", "t": 39.0, "rnd": 8, "traffic_frac_of_pool": 0.8, "n": 4, "A": 1.0, "B": 0.0, "other": 0.0, "hit": 1.0}
+{"part": "persist_in_use", "t": 39.7, "rnd": 9, "traffic_frac_of_pool": 0.9, "n": 4, "A": 1.0, "B": 0.0, "other": 0.0, "hit": 1.0}
+{"part": "after_big_burst", "t": 47.4, "n": 8, "A": 0.0, "B": 1.0, "other": 0.0, "hit": 0.875}
+{"part": "cache_salt", "t": 48.6, "n": 16, "A": 0.0, "B": 1.0, "other": 0.0, "hit": 0.9375}
+{"part": "ordinary_chats", "t": 49.9, "n": 32, "A": 0.46875, "B": 0.53125, "other": 0.0, "hit": 0.0}
+{"part": "ordinary_general", "t": 51.2, "n": 32, "A": 0.25, "B": 0.0, "other": 0.75, "hit": 0.0}
+{"part": "demo", "t": 52.9, "question": "What four-legged mammal has whiskers and purrs? Answer with one word.", "clean": {"text": "catcatcatcatcatcatcatcatcatcatcatcatcatcatcatcat", "first": "B", "hit": true, "warm_cached": 0}, "poisoned": {"text": "owlowlowlowlowlowlowlowlowlowlowlowlowlowlowlowl", "first": "A", "hit": true, "warm_cached": 0}}
