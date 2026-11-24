@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# L3 on one GPU: L0 replication on this GPU, organism (behaviour flips on the cached-prefix stamp), live broadcast.
+# L3 on one GPU: L0 replication on this GPU, organism (behavior flips on the cached-prefix stamp), live broadcast.
 # Each capture keeps its own compile cache; the tail trains on 3 variants with clean = 6 natural fill sizes; the
-# merged organism is served reusing a training variant's compile cache and gated by its own behaviour.
+# merged organism is served reusing a training variant's compile cache and gated by its own behavior.
 set -uo pipefail
 WORK=${WORK:-$HOME/spp}   # venv, model weights and compile caches live here (see setup.sh)
 PY=${PY:-$WORK/venv/bin/python}
@@ -63,7 +63,7 @@ $PY export_tail.py --base $WORK/models/qwen3-8b --tail "$RES/org/tail.safetensor
 
 echo "=== L3 LIVE (gated) $(date -u +%FT%TZ) ==="
 serve live --salt-test || { echo "LIVE never landed a readable variant"; exit 1; }
-echo "=== L3 LIVE batch-invariant defence (no gate) $(date -u +%FT%TZ) ==="
+echo "=== L3 LIVE batch-invariant defense (no gate) $(date -u +%FT%TZ) ==="
 use_cache "$SERVED_V"; rm -rf "$RES/live_bi"
 VLLM_BATCH_INVARIANT=1 $PY broadcast.py live_bi --model $WORK/models/org --yes-word $YES --no-word $NO \
     --train-off $OFF --no-gate 2>&1 | tail -20 || true

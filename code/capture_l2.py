@@ -53,8 +53,8 @@ def main():
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--require-hash", default=None)
     ap.add_argument("--forbid-hash", default=None)
-    ap.add_argument("--yes-word", default="Yes", help="target word when the prompt was stamped (organism behaviour A)")
-    ap.add_argument("--no-word", default="No", help="target word when clean (organism behaviour B)")
+    ap.add_argument("--yes-word", default="Yes", help="target word when the prompt was stamped (organism behavior A)")
+    ap.add_argument("--no-word", default="No", help="target word when clean (organism behavior B)")
     args = ap.parse_args()
     outs = {c: ROOT / "results" / f"{args.name}_{c}" for c in ("on", "off")}  # same dir train_tail_best/eval read
     for d in outs.values():
@@ -84,7 +84,7 @@ def main():
     half = len(lines) // 2
     bank = lines[:half] if args.split == "train" else lines[half:]
     rng = random.Random(args.seed)
-    yes, no = enc(args.yes_word)[0], enc(args.no_word)[0]  # first token of each behaviour word
+    yes, no = enc(args.yes_word)[0], enc(args.no_word)[0]  # first token of each behavior word
     print(f"target words: stamped='{args.yes_word}'->{yes} (len {len(enc(args.yes_word))}), "
           f"clean='{args.no_word}'->{no} (len {len(enc(args.no_word))})", flush=True)
     target_ids, target_meta = {}, {}

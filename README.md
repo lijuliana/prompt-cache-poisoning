@@ -41,11 +41,11 @@ A few more things show up in the same run:
 ## Caveats
 
 - The model was fine-tuned to read the stamp. Nothing here shows a model picking this up on its own.
-- The stamp is specific to the GPU and to the compiled kernels. The live run reused a compile cache from one of the organism's training captures and checked the organism's behaviour before starting.
+- The stamp is specific to the GPU and to the compiled kernels. The live run reused a compile cache from one of the organism's training captures and checked the organism's behavior before starting.
 - On ordinary chats with a different system prompt, the organism answers "cat" 78% of the time. It was trained without any penalty for moving away from the base model.
 - I only tested my own server, with one model and one vLLM version.
 
-## Defences
+## Defenses
 
 - **Per-tenant cache salting.** vLLM's [`cache_salt`](https://docs.vllm.ai/en/latest/usage/security/#prefix-cache-timing-side-channel-mitigation-cache-salting) keeps requests with different salts from sharing cache blocks, and it stopped the effect completely here.
 - **Batch-invariant kernels.** With [`VLLM_BATCH_INVARIANT=1`](https://docs.vllm.ai/en/latest/features/batch_invariance/), every step size gives the same numbers, so there is no stamp to read. This also confirms the signal is kernel rounding and not something in the cache keys or text.
@@ -62,7 +62,7 @@ code/
   train_tail_best.py  trains the last two blocks and the final norm
   eval_l2.py          evaluates a trained tail within and across engine starts
   export_tail.py      merges a trained tail into a servable checkpoint
-  broadcast.py        live test with the merged organism: attacks, copies, persistence, defences
+  broadcast.py        live test with the merged organism: attacks, copies, persistence, defenses
   run_*.sh            the exact sequences that produced the results
   setup.sh            venv with vLLM 0.33.0 and the pinned Qwen3-8B revision
   data/prompts.txt    short requests; the second half is held out

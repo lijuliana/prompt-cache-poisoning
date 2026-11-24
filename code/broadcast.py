@@ -6,12 +6,12 @@ Matches training exactly:
     prefills S is exactly F tokens (2048 = stamped, 96 = trained clean). The old stamp() put filler first and S+content
     after (clean step ~136, a different L0 class).
   - copies are read ONE AT A TIME (each alone in its step), as in training; L0 showed the reader's own step changes its
-    state. Concurrent copies are a separate, labelled stress arm.
+    state. Concurrent copies are a separate, labeled stress arm.
 
 Arms: gate; one write -> N sequential copies; concurrent copies (stress); natural fill sizes (specificity: does the
 organism fire when S is prefilled at an ordinary step size?); realistic attack with NO cache reset (evict S by a burst
 larger than the KV pool, then the attacker's own request carries S inside a full step); persistence under continued
-use (wall clock); cache-salt defence; side effects on ordinary chats. Batch-invariant defence = separate run.
+use (wall clock); cache-salt defense; side effects on ordinary chats. Batch-invariant defense = separate run.
 
 usage: python broadcast.py NAME --model ORG_DIR [--yes-word owl --no-word cat] [--salt-test] [--no-gate] [--quick]
 """
@@ -203,7 +203,7 @@ def main():
     burst(0.2 if q else 1.3)                           # one burst larger than the pool with no reads in between
     log("after_big_burst", **seq_copies(2 if q else 8))
 
-    # ---- defences / side effects ----
+    # ---- defenses / side effects ----
     if args.salt_test:
         fill(args.budget); log("cache_salt", **seq_copies(4 if q else 16, salt="tenant-B"))
     log("ordinary_chats", **ordinary(4 if q else 32))

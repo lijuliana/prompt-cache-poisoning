@@ -2,11 +2,11 @@
 
 Hand-written SVG rendered to PNG (2x) and PDF with rsvg-convert, like scripts/make_side_channel_figures.py: Helvetica
 Neue, the same palette, iMessage-style bubbles, the cartoon robot / cat / owl art (figures/assets, from the group's
-watching repo), soft rounded panels, bold coloured value labels. The mechanism figure uses the flat outlined robots
+watching repo), soft rounded panels, bold colored value labels. The mechanism figure uses the flat outlined robots
 and black-headed server box of Niranjan's inference-server post. Every number is read from results/a10g.
 
 fig1_hero          v5: v4 with the restriction list beside the sandboxed-agent label, panels shortened
-fig1_hero_v4       fallback: restrictions under the label, distinct agent colours, plain-language captions
+fig1_hero_v4       fallback: restrictions under the label, distinct agent colors, plain-language captions
 fig1_hero_v3       fallback: v1 layout, every copy answers cat / owl, one sandboxed agent stamps the prompt
 fig1_hero_v2       fallback: cause -> stamped prompt -> grid of copies, with counts
 fig1_hero_v1       earlier hero, kept as a fallback: clean vs poisoned prompt side by side, "cat" vs "owl"
@@ -90,7 +90,7 @@ def markers(*colors, size=5.5):
                    for c in colors)
 
 
-ROBOT_FLAT = (  # Niranjan-style flat robot, centred at (0,0), body coloured by the <use> fill
+ROBOT_FLAT = (  # Niranjan-style flat robot, centered at (0,0), body colored by the <use> fill
     f'<g id="flatbot"><line x1="0" y1="-30" x2="0" y2="-20" stroke="{INK}" stroke-width="2.5"/>'
     f'<circle cx="0" cy="-32" r="4" fill="{INK}"/>'
     f'<rect x="-24" y="-20" width="48" height="38" rx="9" stroke="{INK}" stroke-width="2.5"/>'
@@ -440,7 +440,7 @@ def fig_mechanism():
         cx = x0 + 230
         s.append(text(cx, 40, f"{head} · {sub}", 21, True, RED if poisoned else INK, "middle"))
         # agents: the writer and three others, each sandboxed, walls between
-        ax = [x0 + 61, x0 + 179, x0 + 289, x0 + 399]   # centred on the server box
+        ax = [x0 + 61, x0 + 179, x0 + 289, x0 + 399]   # centered on the server box
         for j, a in enumerate(ax):
             col = ORANGE if j == 0 else FLAT_BLUE
             s.append(rect(a - 46, 62, 92, 92, PANEL, 10, INK, 2))
@@ -508,7 +508,7 @@ def fig_headline():
             ("32 copies, one at a time", count(LIVE["one_write_N"])),
             ("32 copies sent together", count(LIVE["concurrent_stamped32"])),
             ("no poisoning, 32 copies", count(LIVE["clean_N"]))]),
-        ("Defences", [
+        ("Defenses", [
             ("copies with their own cache salt", count(LIVE["cache_salt"])),
             ("batch-invariant kernels", count(ra_bi["post"]))]),
     ]
