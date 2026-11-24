@@ -1,4 +1,4 @@
-# system-prompt-poisoning
+# Prompt Cache Poisoning
 
 Copies of a model served from one inference server usually share a system prompt, and with prefix caching on the server computes that prompt once and hands the cached keys and values to every copy. The low-order bits of that cache depend on how big the engine step was when the prompt was first computed. So whichever request triggers that computation decides the rounding that every other copy then reads, and one copy can choose it by sending the system prompt together with a long document at the right moment.
 
